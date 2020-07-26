@@ -33,5 +33,12 @@ class URLDetailAPI(APIView):
     def post(self, request):
         '''created a URL object
         '''
-        # To Do
-        return Response(status=status.HTTP_200_OK)
+        data = request.data
+        original_url = data.get('original_url')
+        # check if already exists
+        url_qset = URL.objects.filter(original_url=original_url)
+        if url_qset:
+            url = url_qset[0]
+            return Response(status=status.HTTP_200_OK, data=url.get_json())
+        
+        # create
