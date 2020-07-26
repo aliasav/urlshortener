@@ -6,13 +6,13 @@ class URL(models.Model):
     '''Model for short-long URL mapping
     '''
     # original absolute URL
-    original_url = models.CharField(max_length=1024, null=True, blank=False)
+    original_url = models.CharField(max_length=1024, null=True, blank=False, db_index=True)
 
     # hash value
-    hash_value = models.CharField(max_length=20, null=True, blank=False)
+    hash_value = models.CharField(max_length=20, null=True, blank=False, db_index=True)
 
     # shortened absolute URL
-    short_url = models.CharField(max_length=512, null=True, blank=False)
+    short_url = models.CharField(max_length=512, null=True, blank=False, db_index=True)
 
     # status of the original URL website
     INIT = 0
@@ -38,3 +38,7 @@ class URL(models.Model):
 
     def __str__(self):
         return f'{self.short_url}<-->{self.original_url}'
+
+    def get_json(self):
+        from .serializers import URLSerializer
+        return URLSerializer(self).data
